@@ -29,7 +29,7 @@ export const Bottom = ({ camera }: { camera: Camera }) => {
       <button
         type="button"
         disabled={isPending}
-        className="flex items-center gap-2 rounded-sm border border-zinc-200 bg-zinc-100 px-3 py-2 font-medium shadow-sm duration-100 hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
+        className="border-panel-border bg-panel text-foreground hover:bg-panel-hover flex items-center gap-2 rounded-sm border px-3 py-2 font-medium shadow-sm duration-100 disabled:cursor-not-allowed disabled:opacity-50"
         onClick={handleNewNote}
       >
         {isPending ? (

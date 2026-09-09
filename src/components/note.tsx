@@ -5,6 +5,7 @@ import { useGesture } from "@use-gesture/react";
 import { cn } from "cn";
 import { generateKeyBetween } from "fractional-indexing";
 import {
+  CheckIcon,
   CopyPlusIcon,
   LayersArrowDownIcon,
   LayersArrowUpIcon,
@@ -19,26 +20,26 @@ import { useSelectedNoteIdStore } from "@/stores/selected-note";
 import type { Camera, Color } from "@/types";
 
 const COLORS: Record<Color, string> = {
-  blue: "bg-blue-200 border border-blue-300",
-  emerald: "bg-emerald-200 border border-emerald-300",
-  orange: "bg-orange-200 border border-orange-300",
-  pink: "bg-pink-200 border border-pink-300",
-  purple: "bg-purple-200 border border-purple-300",
-  red: "bg-red-200 border border-red-300",
-  sky: "bg-sky-200 border border-sky-300",
-  yellow: "bg-yellow-200 border border-yellow-300",
+  blue: "bg-note-blue border border-note-blue-border",
+  emerald: "bg-note-emerald border border-note-emerald-border",
+  orange: "bg-note-orange border border-note-orange-border",
+  pink: "bg-note-pink border border-note-pink-border",
+  purple: "bg-note-purple border border-note-purple-border",
+  red: "bg-note-red border border-note-red-border",
+  sky: "bg-note-sky border border-note-sky-border",
+  yellow: "bg-note-yellow border border-note-yellow-border",
 };
 
 const editorClassNames = [
-  "prose leading-normal focus:outline-none",
+  "prose leading-normal focus:outline-none dark:prose-invert",
 
   // elements
   "prose-h1:tracking-tight prose-h1:font-bold prose-h1:text-2xl",
   "prose-h2:tracking-tight prose-h2:font-bold prose-h2:text-xl",
   "prose-h3:tracking-tight prose-h3:font-bold prose-h3:text-lg",
 
-  "prose-p:font-medium prose-hr:border-black prose-li:marker:text-black prose-blockquote:border-black",
-  "prose-pre:bg-black prose-pre:text-white",
+  "prose-p:font-medium prose-hr:border-foreground prose-li:marker:text-foreground prose-blockquote:border-foreground",
+  "prose-pre:bg-foreground prose-pre:text-background",
   "prose-blockquote:font-serif",
   "prose-code:font-mono",
 ].join(" ");
@@ -229,7 +230,7 @@ export const NoteItem = ({
       <div
         className={cn(
           isSelected ? "flex" : "hidden",
-          "absolute bottom-full left-1/2 z-999 origin-bottom -translate-x-1/2 rounded-md border border-zinc-200 bg-zinc-100"
+          "border-panel-border bg-panel text-foreground absolute bottom-full left-1/2 z-999 origin-bottom -translate-x-1/2 rounded-md border shadow-lg backdrop-blur-sm"
         )}
         style={{
           transform: `scale(${1 / camera.scale}) translateY(${camera.scale * -12}px)`,
@@ -245,25 +246,26 @@ export const NoteItem = ({
                 onClick={(e) => handleColorChange(e, k)}
                 key={COLORS[k]}
                 className={cn(
-                  "flex size-8 items-center justify-center rounded-sm",
+                  "relative flex size-8 items-center justify-center rounded-sm transition-transform hover:scale-105 active:scale-95",
                   COLORS[k]
                 )}
                 disabled={note.color === k}
               >
                 {note.color === k && (
-                  <div className={cn(COLORS[k], "rounded-full border-10")} />
+                  // <div className="bg-foreground size-2 rounded-full shadow-xs" />
+                  <CheckIcon className="size-4.5" />
                 )}
               </button>
             ))}
         </div>
 
-        <div className="h-11 w-px bg-zinc-200" />
+        <div className="bg-panel-border h-11 w-px" />
 
         <div className="flex gap-0 p-1.5">
           <button
             type="button"
             aria-label="Duplicate"
-            className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
+            className="text-foreground hover:bg-panel-hover flex size-8 items-center justify-center rounded-sm"
             onClick={handleDuplicate}
           >
             <CopyPlusIcon className="size-5" />
@@ -272,16 +274,16 @@ export const NoteItem = ({
           <button
             type="button"
             aria-label="Delete"
-            className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
+            className="hover:bg-panel-hover flex size-8 items-center justify-center rounded-sm text-red-500"
             onClick={handleDelete}
           >
-            <TrashIcon className="size-5 text-red-500" />
+            <TrashIcon className="size-5" />
           </button>
 
           <button
             type="button"
             aria-label="Bring forward"
-            className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
+            className="text-foreground hover:bg-panel-hover flex size-8 items-center justify-center rounded-sm"
             onClick={handleBringForward}
           >
             <LayersArrowUpIcon className="size-5" />
@@ -290,7 +292,7 @@ export const NoteItem = ({
           <button
             type="button"
             aria-label="Send backward"
-            className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
+            className="text-foreground hover:bg-panel-hover flex size-8 items-center justify-center rounded-sm"
             onClick={handleSendBackward}
           >
             <LayersArrowDownIcon className="size-5" />

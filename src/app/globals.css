@@ -2,20 +2,100 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0.008 260);
+
+  --panel-bg: oklch(0.98 0.002 260);
+  --panel-border: oklch(0.9 0.005 260);
+  --panel-hover: oklch(0.93 0.004 260);
+
+  /* Note colors - light mode (pastel paper wash) */
+  --note-blue-bg: oklch(0.882 0.057 254.13);
+  --note-blue-border: oklch(0.809 0.096 251.81);
+
+  --note-emerald-bg: oklch(0.905 0.089 164.15);
+  --note-emerald-border: oklch(0.845 0.13 164.98);
+
+  --note-orange-bg: oklch(0.901 0.073 70.7);
+  --note-orange-border: oklch(0.837 0.117 66.29);
+
+  --note-pink-bg: oklch(0.899 0.059 343.23);
+  --note-pink-border: oklch(0.823 0.11 346.02);
+
+  --note-purple-bg: oklch(0.902 0.06 306.7);
+  --note-purple-border: oklch(0.827 0.108 306.38);
+
+  --note-red-bg: oklch(0.885 0.059 18.33);
+  --note-red-border: oklch(0.808 0.103 19.57);
+
+  --note-sky-bg: oklch(0.901 0.055 230.9);
+  --note-sky-border: oklch(0.828 0.101 230.32);
+
+  --note-yellow-bg: oklch(0.945 0.124 101.54);
+  --note-yellow-border: oklch(0.905 0.166 98.11);
 }
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   :root {
-    --background: #1f1f1f;
-    --foreground: #ffffff;
+    --background: oklch(0.145 0.008 260);
+    --foreground: oklch(0.96 0.002 260);
+
+    --panel-bg: oklch(0.2 0.008 260);
+    --panel-border: oklch(0.29 0.01 260);
+    --panel-hover: oklch(0.25 0.01 260);
+
+    /* Note colors - dark mode (solid, muted dark paper wash) */
+    --note-blue-bg: oklch(0.26 0.045 254.13);
+    --note-blue-border: oklch(0.34 0.068 254.13);
+
+    --note-emerald-bg: oklch(0.26 0.04 164.15);
+    --note-emerald-border: oklch(0.34 0.062 164.15);
+
+    --note-orange-bg: oklch(0.26 0.042 70.7);
+    --note-orange-border: oklch(0.34 0.064 70.7);
+
+    --note-pink-bg: oklch(0.26 0.044 343.23);
+    --note-pink-border: oklch(0.34 0.066 343.23);
+
+    --note-purple-bg: oklch(0.26 0.044 306.7);
+    --note-purple-border: oklch(0.34 0.066 306.7);
+
+    --note-red-bg: oklch(0.26 0.044 18.33);
+    --note-red-border: oklch(0.34 0.066 18.33);
+
+    --note-sky-bg: oklch(0.26 0.038 230.9);
+    --note-sky-border: oklch(0.34 0.058 230.9);
+
+    --note-yellow-bg: oklch(0.27 0.042 101.54);
+    --note-yellow-border: oklch(0.35 0.065 101.54);
   }
-} */
+}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-panel: var(--panel-bg);
+  --color-panel-border: var(--panel-border);
+  --color-panel-hover: var(--panel-hover);
+
+  --color-note-blue: var(--note-blue-bg);
+  --color-note-blue-border: var(--note-blue-border);
+  --color-note-emerald: var(--note-emerald-bg);
+  --color-note-emerald-border: var(--note-emerald-border);
+  --color-note-orange: var(--note-orange-bg);
+  --color-note-orange-border: var(--note-orange-border);
+  --color-note-pink: var(--note-pink-bg);
+  --color-note-pink-border: var(--note-pink-border);
+  --color-note-purple: var(--note-purple-bg);
+  --color-note-purple-border: var(--note-purple-border);
+  --color-note-red: var(--note-red-bg);
+  --color-note-red-border: var(--note-red-border);
+  --color-note-sky: var(--note-sky-bg);
+  --color-note-sky-border: var(--note-sky-border);
+  --color-note-yellow: var(--note-yellow-bg);
+  --color-note-yellow-border: var(--note-yellow-border);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-domine);

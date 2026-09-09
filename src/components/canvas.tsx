@@ -59,7 +59,7 @@ export const Canvas = ({
 
   // dotted background
   const scale = Math.max(camera.scale, 0.1);
-  const gap = 32 * scale;
+  const gap = 36 * scale;
   const dotRadius = (2 / 2) * scale;
   const offsetX = (((camera.x - gap / 2) % gap) + gap) % gap;
   const offsetY = (((camera.y - gap / 2) % gap) + gap) % gap;
@@ -76,10 +76,11 @@ export const Canvas = ({
         >
           <div
             style={{
-              backgroundImage: `radial-gradient(circle at ${gap / 2}px ${gap / 2}px, var(--color-zinc-300) ${dotRadius}px, transparent ${dotRadius + 0.75}px)`,
+              backgroundImage: `radial-gradient(circle at ${gap / 2}px ${gap / 2}px, var(--color-foreground) ${dotRadius}px, transparent ${dotRadius + 0.75}px)`,
               backgroundSize: `${gap}px ${gap}px`,
               height: `calc(100% + ${gap * 4}px)`,
               left: -gap * 2,
+              opacity: "25%",
               position: "absolute",
               top: -gap * 2,
               transform: `translate3d(${offsetX}px, ${offsetY}px, 0)`,
