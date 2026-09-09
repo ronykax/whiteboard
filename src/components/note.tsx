@@ -64,7 +64,6 @@ export const NoteItem = ({
     },
     extensions: [StarterKit.configure()],
     immediatelyRender: true,
-    onBlur: () => setIsEditingState(false),
     onUpdate: ({ editor: currentEditor }) => {
       const html = currentEditor.getHTML();
       if (html !== note.html) {
@@ -106,7 +105,9 @@ export const NoteItem = ({
           return;
         }
 
-        setSelectedNoteId(note.id);
+        if (!isSelected) {
+          setSelectedNoteId(note.id);
+        }
         updateNote({ ...note, x: note.x + x, y: note.y + y });
       },
     },
@@ -193,13 +194,12 @@ export const NoteItem = ({
     </div>
   );
 
-  if (isSelected) {
-    return (
-      <DismissableLayer asChild onDismiss={() => setSelectedNoteId(null)}>
-        {noteContent}
-      </DismissableLayer>
-    );
-  }
-
-  return noteContent;
+  return (
+    <DismissableLayer
+      asChild
+      onDismiss={isSelected ? () => setSelectedNoteId(null) : undefined}
+    >
+      {noteContent}
+    </DismissableLayer>
+  );
 };
