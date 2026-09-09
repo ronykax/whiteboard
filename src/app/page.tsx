@@ -5,7 +5,7 @@ import { notesTable } from "@/db/schema";
 export const dynamic = "force-dynamic";
 
 const Page = async () => {
-  const notes = await db.select().from(notesTable);
+  const notes = await db.select().from(notesTable).orderBy(notesTable.position);
   return <Canvas initialNotes={notes} />;
 };
 

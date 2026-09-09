@@ -9,6 +9,7 @@ export const notesTable = sqliteTable("notes", {
   id: text()
     .primaryKey()
     .$defaultFn(() => nanoid(6)),
+  position: text().notNull(),
   x: int().notNull(),
   y: int().notNull(),
 });

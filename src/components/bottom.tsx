@@ -1,3 +1,4 @@
+import { generateKeyBetween } from "fractional-indexing";
 import { PlusIcon, Loader2 } from "lucide-react";
 import { useTransition } from "react";
 
@@ -5,13 +6,17 @@ import { useCanvasStore } from "@/stores/canvas";
 
 export const Bottom = () => {
   const createNote = useCanvasStore((state) => state.createNote);
+  const notes = useCanvasStore((state) => state.notes);
   const [isPending, startTransition] = useTransition();
 
   const handleNewNote = () => {
+    const lastNote = notes.at(-1);
+    const position = generateKeyBetween(lastNote?.position || null, null);
     startTransition(() => {
       createNote({
         color: "blue",
         html: "The quick brown jumps over the lazy dog.",
+        position,
         x: 24,
         y: 24,
       });

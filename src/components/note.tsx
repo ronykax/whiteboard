@@ -3,7 +3,13 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useGesture } from "@use-gesture/react";
 import { cn } from "cn";
-import { CopyPlusIcon, TrashIcon } from "lucide-react";
+import { generateKeyBetween } from "fractional-indexing";
+import {
+  CopyPlusIcon,
+  LayersArrowDownIcon,
+  LayersArrowUpIcon,
+  TrashIcon,
+} from "lucide-react";
 import type { MouseEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -46,6 +52,7 @@ export const NoteItem = ({
 }) => {
   const updateNote = useCanvasStore((s) => s.updateNote);
   const deleteNote = useCanvasStore((s) => s.deleteNote);
+  const notes = useCanvasStore((s) => s.notes);
 
   const selectedNoteId = useSelectedNoteIdStore((s) => s.selectedNoteId);
   const setSelectedNoteId = useSelectedNoteIdStore((s) => s.setSelectedNoteId);
@@ -134,12 +141,12 @@ export const NoteItem = ({
     [updateNote, note]
   );
 
-  const handleCopy = useCallback(
+  const handleDuplicate = useCallback(
     (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
       e.stopPropagation();
-      navigator.clipboard.writeText(editor.getText());
+      // handle note duplication
     },
-    [editor]
+    []
   );
 
   const handleDelete = useCallback(
@@ -148,6 +155,58 @@ export const NoteItem = ({
       deleteNote(note);
     },
     [deleteNote, note]
+  );
+
+  // src/components/note.tsx
+
+  const handleBringForward = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+
+      const index = notes.findIndex((n) => n.id === note.id);
+      // Already at the top (or note not found)
+      if (index === -1 || index === notes.length - 1) {
+        return;
+      }
+
+      const currentNote = notes[index];
+      const nextNote = notes[index + 1];
+      const nextNextNote = notes[index + 2];
+
+      // Place between the note above and the one above that (or null if reaching top)
+      const newPosition = generateKeyBetween(
+        nextNote.position,
+        nextNextNote?.position || null
+      );
+
+      updateNote({ ...currentNote, position: newPosition });
+    },
+    [notes, note.id, updateNote]
+  );
+
+  const handleSendBackward = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+
+      const index = notes.findIndex((n) => n.id === note.id);
+      // Already at the bottom
+      if (index <= 0) {
+        return;
+      }
+
+      const currentNote = notes[index];
+      const prevNote = notes[index - 1];
+      const prevPrevNote = notes[index - 2];
+
+      // Place between the note 2 steps below (or null if reaching bottom) and the note below
+      const newPosition = generateKeyBetween(
+        prevPrevNote?.position || null,
+        prevNote.position
+      );
+
+      updateNote({ ...currentNote, position: newPosition });
+    },
+    [notes, note.id, updateNote]
   );
 
   const noteContent = (
@@ -180,8 +239,13 @@ export const NoteItem = ({
                 aria-label={k}
                 onClick={(e) => handleColorChange(e, k)}
                 key={COLORS[k]}
-                className={cn("size-8 rounded-sm", COLORS[k])}
-              />
+                className={cn(
+                  "flex size-8 items-center justify-center rounded-sm",
+                  COLORS[k]
+                )}
+              >
+                <div className={cn(COLORS[k], "rounded-full border-10")} />
+              </button>
             ))}
         </div>
 
@@ -190,9 +254,9 @@ export const NoteItem = ({
         <div className="flex gap-1 p-1.5">
           <button
             type="button"
-            aria-label="Copy"
+            aria-label="Duplicate"
             className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
-            onClick={handleCopy}
+            onClick={handleDuplicate}
           >
             <CopyPlusIcon className="size-5" />
           </button>
@@ -204,6 +268,24 @@ export const NoteItem = ({
             onClick={handleDelete}
           >
             <TrashIcon className="size-5 text-red-500" />
+          </button>
+
+          <button
+            type="button"
+            aria-label="Bring forward"
+            className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
+            onClick={handleBringForward}
+          >
+            <LayersArrowUpIcon className="size-5" />
+          </button>
+
+          <button
+            type="button"
+            aria-label="Send backward"
+            className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
+            onClick={handleSendBackward}
+          >
+            <LayersArrowDownIcon className="size-5" />
           </button>
         </div>
       </div>

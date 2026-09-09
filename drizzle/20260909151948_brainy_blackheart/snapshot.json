@@ -1,7 +1,7 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "a85b4e81-2bb2-4ad9-bdf1-37c62129d152",
+  "id": "ec5c3950-2c4e-48a9-b200-eca50923eea2",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -37,6 +37,16 @@
       "default": null,
       "generated": null,
       "name": "id",
+      "entityType": "columns",
+      "table": "notes"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "position",
       "entityType": "columns",
       "table": "notes"
     },
