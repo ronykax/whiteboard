@@ -248,8 +248,11 @@ export const NoteItem = ({
                   "flex size-8 items-center justify-center rounded-sm",
                   COLORS[k]
                 )}
+                disabled={note.color === k}
               >
-                <div className={cn(COLORS[k], "rounded-full border-10")} />
+                {note.color === k && (
+                  <div className={cn(COLORS[k], "rounded-full border-10")} />
+                )}
               </button>
             ))}
         </div>
@@ -303,19 +306,19 @@ export const NoteItem = ({
     </div>
   );
 
-  return (
-    <DismissableLayer
-      asChild
-      onDismiss={
-        isSelected
-          ? () => {
-              setSelectedNoteId(null);
-              setIsEditingState(false);
-            }
-          : undefined
-      }
-    >
-      {noteContent}
-    </DismissableLayer>
-  );
+  if (isSelected) {
+    return (
+      <DismissableLayer
+        asChild
+        onDismiss={() => {
+          setSelectedNoteId(null);
+          setIsEditingState(false);
+        }}
+      >
+        {noteContent}
+      </DismissableLayer>
+    );
+  }
+
+  return noteContent;
 };
