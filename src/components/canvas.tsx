@@ -50,7 +50,7 @@ export const Canvas = ({
     {
       pinch: {
         from: () => [camera.scale, 0],
-        scaleBounds: { max: 2, min: 0.1 },
+        scaleBounds: { max: 3, min: 0.1 },
       },
       target: canvasRef,
     }
