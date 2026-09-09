@@ -4,6 +4,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { useGesture } from "@use-gesture/react";
 import { cn } from "cn";
 import { CopyIcon, Trash2Icon } from "lucide-react";
+import type { MouseEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
 
 import type { notesTable } from "@/db/schema";
@@ -26,19 +27,14 @@ const editorClassNames = [
   "prose leading-normal focus:outline-none",
 
   // elements
-  "prose-h1:tracking-tight prose-h1:font-bold",
-  "prose-h2:tracking-tight prose-h2:font-bold",
-  "prose-h3:tracking-tight prose-h3:font-bold",
-  "prose-h4:tracking-tight prose-h4:font-bold",
-  "prose-h5:tracking-tight prose-h5:font-bold",
-  "prose-h6:tracking-tight prose-h6:font-bold",
+  "prose-h1:tracking-tight prose-h1:font-bold prose-h1:text-2xl",
+  "prose-h2:tracking-tight prose-h2:font-bold prose-h2:text-xl",
+  "prose-h3:tracking-tight prose-h3:font-bold prose-h3:text-lg",
 
-  "prose-p:font-medium prose-hr:border-black prose-li:marker:text-black",
-  "prose-blockquote:font-serif prose-blockquote:border-black",
-
-  // code
-  "prose-code:font-mono",
+  "prose-p:font-medium prose-hr:border-black prose-li:marker:text-black prose-blockquote:border-black",
   "prose-pre:bg-black prose-pre:text-white",
+  "prose-blockquote:font-serif",
+  "prose-code:font-mono",
 ].join(" ");
 
 export const NoteItem = ({
@@ -62,7 +58,7 @@ export const NoteItem = ({
         class: editorClassNames,
       },
     },
-    extensions: [StarterKit.configure()],
+    extensions: [StarterKit.configure({ heading: { levels: [1, 2, 3] } })],
     immediatelyRender: true,
     onUpdate: ({ editor: currentEditor }) => {
       const html = currentEditor.getHTML();
@@ -93,6 +89,7 @@ export const NoteItem = ({
           setIsEditingState(true);
         } else {
           setSelectedNoteId(note.id);
+          setIsEditingState(false);
         }
       },
       onDrag: ({ delta: [x, y], event, cancel, tap }) => {
@@ -107,6 +104,7 @@ export const NoteItem = ({
 
         if (!isSelected) {
           setSelectedNoteId(note.id);
+          setIsEditingState(false);
         }
         updateNote({ ...note, x: note.x + x, y: note.y + y });
       },
@@ -121,16 +119,31 @@ export const NoteItem = ({
   );
 
   const handleColorChange = useCallback(
-    (color: Color) => updateNote({ ...note, color }),
+    (
+      event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+      color: Color
+    ) => {
+      event.stopPropagation();
+      updateNote({ ...note, color });
+    },
     [updateNote, note]
   );
 
   const handleCopy = useCallback(
-    () => navigator.clipboard.writeText(editor.getText()),
+    (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(editor.getText());
+    },
     [editor]
   );
 
-  const handleDelete = useCallback(() => deleteNote(note), [deleteNote, note]);
+  const handleDelete = useCallback(
+    (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+      e.stopPropagation();
+      deleteNote(note);
+    },
+    [deleteNote, note]
+  );
 
   const noteContent = (
     <div
@@ -156,7 +169,7 @@ export const NoteItem = ({
               <button
                 type="button"
                 aria-label={k}
-                onClick={() => handleColorChange(k)}
+                onClick={(e) => handleColorChange(e, k)}
                 key={COLORS[k]}
                 className={cn("size-6 rounded-xs", COLORS[k])}
               />
@@ -197,7 +210,14 @@ export const NoteItem = ({
   return (
     <DismissableLayer
       asChild
-      onDismiss={isSelected ? () => setSelectedNoteId(null) : undefined}
+      onDismiss={
+        isSelected
+          ? () => {
+              setSelectedNoteId(null);
+              setIsEditingState(false);
+            }
+          : undefined
+      }
     >
       {noteContent}
     </DismissableLayer>
