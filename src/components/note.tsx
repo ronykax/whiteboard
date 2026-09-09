@@ -42,9 +42,12 @@ export const NoteItem = ({
 }: {
   note: typeof notesTable.$inferSelect;
 }) => {
-  const updateNote = useCanvasStore((state) => state.updateNote);
-  const deleteNote = useCanvasStore((state) => state.deleteNote);
-  const { selectedNoteId, setSelectedNoteId } = useSelectedNoteIdStore();
+  const updateNote = useCanvasStore((s) => s.updateNote);
+  const deleteNote = useCanvasStore((s) => s.deleteNote);
+
+  const selectedNoteId = useSelectedNoteIdStore((s) => s.selectedNoteId);
+  const setSelectedNoteId = useSelectedNoteIdStore((s) => s.setSelectedNoteId);
+
   const [isEditingState, setIsEditingState] = useState(false);
 
   const isSelected = selectedNoteId === note.id;
