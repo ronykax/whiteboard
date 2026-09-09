@@ -3,7 +3,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useGesture } from "@use-gesture/react";
 import { cn } from "cn";
-import { CopyIcon, Trash2Icon } from "lucide-react";
+import { CopyPlusIcon, TrashIcon } from "lucide-react";
 import type { MouseEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -188,7 +188,7 @@ export const NoteItem = ({
             className="flex size-6 items-center justify-center rounded-xs hover:bg-zinc-200"
             onClick={handleCopy}
           >
-            <CopyIcon className="size-4.5" />
+            <CopyPlusIcon className="size-4.5" />
           </button>
 
           <button
@@ -197,7 +197,7 @@ export const NoteItem = ({
             className="flex size-6 items-center justify-center rounded-xs hover:bg-zinc-200"
             onClick={handleDelete}
           >
-            <Trash2Icon className="size-4.5 text-red-500" />
+            <TrashIcon className="size-4.5 text-red-500" />
           </button>
         </div>
       </div>

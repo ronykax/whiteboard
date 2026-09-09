@@ -24,23 +24,36 @@ export const Canvas = ({
 
   useGesture(
     {
-      onPinch: ({ origin: [ox, oy], first, memo = [ox, oy] }) => {
+      onPinch: ({ origin: [ox, oy], first, memo = [ox, oy], offset: [s] }) => {
         if (first) {
           return [ox, oy];
         }
 
-        setCamera((cam) => ({
-          ...cam,
-          x: cam.x + ox - memo[0],
-          y: cam.y + oy - memo[1],
-        }));
+        setCamera((cam) => {
+          const d = s / cam.scale;
+          return {
+            scale: s,
+            x: ox - (memo[0] - cam.x) * d,
+            y: oy - (memo[1] - cam.y) * d,
+          };
+        });
 
         return [ox, oy];
       },
-      onWheel: ({ delta: [dx, dy] }) =>
-        setCamera((cam) => ({ ...cam, x: cam.x - dx, y: cam.y - dy })),
+      onWheel: ({ delta: [dx, dy], pinching }) => {
+        if (pinching) {
+          return;
+        }
+        setCamera((cam) => ({ ...cam, x: cam.x - dx, y: cam.y - dy }));
+      },
     },
-    { target: canvasRef }
+    {
+      pinch: {
+        from: () => [camera.scale, 0],
+        scaleBounds: { max: 2, min: 0.1 },
+      },
+      target: canvasRef,
+    }
   );
 
   // dotted background
