@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import type { notesTable } from "@/db/schema";
 import { useCanvasStore } from "@/stores/canvas";
+import type { Camera } from "@/types";
 
 import { Bottom } from "./bottom";
 import { NoteItem } from "./note";
@@ -14,7 +15,7 @@ export const Canvas = ({
 }: {
   initialNotes: (typeof notesTable.$inferSelect)[];
 }) => {
-  const [camera, setCamera] = useState({ scale: 1, x: 0, y: 0 });
+  const [camera, setCamera] = useState<Camera>({ scale: 1, x: 0, y: 0 });
   const notes = useCanvasStore((state) => state.notes);
   const setNotes = useCanvasStore((state) => state.setNotes);
 
@@ -101,7 +102,7 @@ export const Canvas = ({
         </div>
       </div>
 
-      <Bottom />
+      <Bottom camera={camera} />
     </>
   );
 };

@@ -3,8 +3,9 @@ import { PlusIcon, Loader2 } from "lucide-react";
 import { useTransition } from "react";
 
 import { useCanvasStore } from "@/stores/canvas";
+import type { Camera } from "@/types";
 
-export const Bottom = () => {
+export const Bottom = ({ camera }: { camera: Camera }) => {
   const createNote = useCanvasStore((state) => state.createNote);
   const notes = useCanvasStore((state) => state.notes);
   const [isPending, startTransition] = useTransition();
@@ -17,8 +18,8 @@ export const Bottom = () => {
         color: "blue",
         html: "The quick brown jumps over the lazy dog.",
         position,
-        x: 24,
-        y: 24,
+        x: (window.innerWidth / 2 - camera.x) / camera.scale,
+        y: (window.innerHeight / 2 - camera.y) / camera.scale,
       });
     });
   };

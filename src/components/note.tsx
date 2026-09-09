@@ -16,7 +16,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { notesTable } from "@/db/schema";
 import { useCanvasStore } from "@/stores/canvas";
 import { useSelectedNoteIdStore } from "@/stores/selected-note";
-import type { Color } from "@/types";
+import type { Camera, Color } from "@/types";
 
 const COLORS: Record<Color, string> = {
   blue: "bg-blue-200 border border-blue-300",
@@ -48,7 +48,7 @@ export const NoteItem = ({
   camera,
 }: {
   note: typeof notesTable.$inferSelect;
-  camera: { x: number; y: number; scale: number };
+  camera: Camera;
 }) => {
   const updateNote = useCanvasStore((s) => s.updateNote);
   const deleteNote = useCanvasStore((s) => s.deleteNote);

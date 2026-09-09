@@ -7,3 +7,9 @@ export type Color =
   | "pink"
   | "emerald"
   | "sky";
+
+export interface Camera {
+  x: number;
+  y: number;
+  scale: number;
+}
