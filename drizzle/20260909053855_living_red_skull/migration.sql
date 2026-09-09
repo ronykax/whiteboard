@@ -5,5 +5,3 @@ CREATE TABLE `notes` (
 	`x` integer NOT NULL,
 	`y` integer NOT NULL
 );
---> statement-breakpoint
-DROP TABLE `users_table`;
