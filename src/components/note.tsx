@@ -256,7 +256,7 @@ export const NoteItem = ({
 
         <div className="h-11 w-px bg-zinc-200" />
 
-        <div className="flex gap-1 p-1.5">
+        <div className="flex gap-0 p-1.5">
           <button
             type="button"
             aria-label="Duplicate"
