@@ -118,7 +118,12 @@ export const NoteItem = ({
           setSelectedNoteId(note.id);
           setIsEditingState(false);
         }
-        updateNote({ ...note, x: note.x + x, y: note.y + y });
+
+        updateNote({
+          ...note,
+          x: note.x + x / camera.scale,
+          y: note.y + y / camera.scale,
+        });
       },
     },
     {
