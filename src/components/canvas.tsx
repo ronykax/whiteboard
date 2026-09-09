@@ -15,13 +15,25 @@ export const Canvas = ({
 }: {
   initialNotes: (typeof notesTable.$inferSelect)[];
 }) => {
-  const [camera, setCamera] = useState<Camera>({ scale: 1, x: 0, y: 0 });
+  const [camera, setCamera] = useState<Camera>(() => {
+    const saved = localStorage.getItem("camera");
+    return saved ? JSON.parse(saved) : { scale: 1, x: 0, y: 0 };
+  });
+
   const notes = useCanvasStore((state) => state.notes);
   const setNotes = useCanvasStore((state) => state.setNotes);
 
   const canvasRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => setNotes(initialNotes), [setNotes, initialNotes]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      localStorage.setItem("camera", JSON.stringify(camera));
+    }, 250);
+
+    return () => clearTimeout(timeout);
+  }, [camera]);
 
   useGesture(
     {
