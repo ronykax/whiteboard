@@ -39,8 +39,10 @@ const editorClassNames = [
 
 export const NoteItem = ({
   note,
+  camera,
 }: {
   note: typeof notesTable.$inferSelect;
+  camera: { x: number; y: number; scale: number };
 }) => {
   const updateNote = useCanvasStore((s) => s.updateNote);
   const deleteNote = useCanvasStore((s) => s.deleteNote);
@@ -159,13 +161,17 @@ export const NoteItem = ({
       )}
       {...bind()}
     >
+      {/* top bar */}
       <div
         className={cn(
           isSelected ? "flex" : "hidden",
-          "absolute -top-12 left-1/2 z-999 -translate-x-1/2 rounded-sm border border-zinc-200 bg-zinc-100"
+          "absolute bottom-full left-1/2 z-999 origin-bottom -translate-x-1/2 rounded-md border border-zinc-200 bg-zinc-100"
         )}
+        style={{
+          transform: `scale(${1 / camera.scale}) translateY(${camera.scale * -12}px)`,
+        }}
       >
-        <div className="flex gap-1 p-1">
+        <div className="flex gap-2 p-1.5">
           {Object.keys(COLORS)
             .filter((k): k is Color => k in COLORS)
             .map((k) => (
@@ -174,30 +180,30 @@ export const NoteItem = ({
                 aria-label={k}
                 onClick={(e) => handleColorChange(e, k)}
                 key={COLORS[k]}
-                className={cn("size-6 rounded-xs", COLORS[k])}
+                className={cn("size-8 rounded-sm", COLORS[k])}
               />
             ))}
         </div>
 
-        <div className="h-8 w-px bg-zinc-200" />
+        <div className="h-11 w-px bg-zinc-200" />
 
-        <div className="flex gap-0.5 p-1">
+        <div className="flex gap-1 p-1.5">
           <button
             type="button"
             aria-label="Copy"
-            className="flex size-6 items-center justify-center rounded-xs hover:bg-zinc-200"
+            className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
             onClick={handleCopy}
           >
-            <CopyPlusIcon className="size-4.5" />
+            <CopyPlusIcon className="size-5" />
           </button>
 
           <button
             type="button"
             aria-label="Delete"
-            className="flex size-6 items-center justify-center rounded-xs hover:bg-zinc-200"
+            className="flex size-8 items-center justify-center rounded-sm hover:bg-zinc-200"
             onClick={handleDelete}
           >
-            <TrashIcon className="size-4.5 text-red-500" />
+            <TrashIcon className="size-5 text-red-500" />
           </button>
         </div>
       </div>

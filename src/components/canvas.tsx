@@ -96,7 +96,7 @@ export const Canvas = ({
           className="pointer-events-none relative"
         >
           {notes.map((note) => (
-            <NoteItem key={note.id} note={note} />
+            <NoteItem key={note.id} note={note} camera={camera} />
           ))}
         </div>
       </div>
