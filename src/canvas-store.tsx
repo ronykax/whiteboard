@@ -13,6 +13,8 @@ interface CanvasStore {
   updateNote: (note: typeof notesTable.$inferSelect) => void;
   createNote: (note: typeof notesTable.$inferInsert) => void;
   deleteNote: (note: typeof notesTable.$inferSelect) => void;
+  selectedNoteId: string | null;
+  setSelectedNoteId: (selectedNote: string | null) => void;
 }
 
 let updateTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -42,7 +44,9 @@ export const useCanvasStore = create<CanvasStore>()((set) => ({
     await deleteNoteAction(note);
   },
   notes: [],
+  selectedNoteId: null,
   setNotes: (notes) => set({ notes: sortNotes(notes) }),
+  setSelectedNoteId: (selectedNote) => set({ selectedNoteId: selectedNote }),
   updateNote: (note) => {
     set((state) => ({
       notes: sortNotes(state.notes.map((n) => (n.id === note.id ? note : n))),

@@ -3,4 +3,7 @@
 ## todo
 
 - [ ] display selection ring on top of everything
-- [ ] reorder notes to move notes front/back
+- [x] reorder notes to move notes front/back
+- [ ] note width presets
+- [ ] fix dotted background
+- [ ] ditch server actions for api routes

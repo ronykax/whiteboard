@@ -2,7 +2,7 @@ import { generateKeyBetween } from "fractional-indexing";
 import { PlusIcon, Loader2 } from "lucide-react";
 import { useTransition } from "react";
 
-import { useCanvasStore } from "@/stores/canvas";
+import { useCanvasStore } from "@/canvas-store";
 import type { Camera } from "@/types";
 
 export const Bottom = ({ camera }: { camera: Camera }) => {

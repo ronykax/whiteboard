@@ -9,7 +9,6 @@
   --panel-border: oklch(0.9 0.005 260);
   --panel-hover: oklch(0.93 0.004 260);
 
-  /* Note colors - light mode (pastel paper wash) */
   --note-blue-bg: oklch(0.882 0.057 254.13);
   --note-blue-border: oklch(0.809 0.096 251.81);
 
@@ -33,42 +32,6 @@
 
   --note-yellow-bg: oklch(0.945 0.124 101.54);
   --note-yellow-border: oklch(0.905 0.166 98.11);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: oklch(0.145 0.008 260);
-    --foreground: oklch(0.96 0.002 260);
-
-    --panel-bg: oklch(0.2 0.008 260);
-    --panel-border: oklch(0.29 0.01 260);
-    --panel-hover: oklch(0.25 0.01 260);
-
-    /* Note colors - dark mode (solid, muted dark paper wash) */
-    --note-blue-bg: oklch(0.26 0.045 254.13);
-    --note-blue-border: oklch(0.34 0.068 254.13);
-
-    --note-emerald-bg: oklch(0.26 0.04 164.15);
-    --note-emerald-border: oklch(0.34 0.062 164.15);
-
-    --note-orange-bg: oklch(0.26 0.042 70.7);
-    --note-orange-border: oklch(0.34 0.064 70.7);
-
-    --note-pink-bg: oklch(0.26 0.044 343.23);
-    --note-pink-border: oklch(0.34 0.066 343.23);
-
-    --note-purple-bg: oklch(0.26 0.044 306.7);
-    --note-purple-border: oklch(0.34 0.066 306.7);
-
-    --note-red-bg: oklch(0.26 0.044 18.33);
-    --note-red-border: oklch(0.34 0.066 18.33);
-
-    --note-sky-bg: oklch(0.26 0.038 230.9);
-    --note-sky-border: oklch(0.34 0.058 230.9);
-
-    --note-yellow-bg: oklch(0.27 0.042 101.54);
-    --note-yellow-border: oklch(0.35 0.065 101.54);
-  }
 }
 
 @theme inline {

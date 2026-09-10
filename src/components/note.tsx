@@ -1,4 +1,6 @@
 import { useDismiss, useFloating, useInteractions } from "@floating-ui/react";
+import { Image } from "@tiptap/extension-image";
+import { Link } from "@tiptap/extension-link";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useGesture } from "@use-gesture/react";
@@ -14,9 +16,8 @@ import {
 import type { MouseEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
 
+import { useCanvasStore } from "@/canvas-store";
 import type { notesTable } from "@/db/schema";
-import { useCanvasStore } from "@/stores/canvas";
-import { useSelectedNoteIdStore } from "@/stores/selected-note";
 import type { Camera, Color } from "@/types";
 
 const COLORS: Record<Color, string> = {
@@ -31,7 +32,7 @@ const COLORS: Record<Color, string> = {
 };
 
 const editorClassNames = [
-  "prose leading-normal focus:outline-none dark:prose-invert",
+  "prose leading-normal focus:outline-none",
 
   // elements
   "prose-h1:tracking-tight prose-h1:font-bold prose-h1:text-2xl",
@@ -54,11 +55,11 @@ export const NoteItem = ({
   const updateNote = useCanvasStore((s) => s.updateNote);
   const deleteNote = useCanvasStore((s) => s.deleteNote);
   const notes = useCanvasStore((s) => s.notes);
-
-  const selectedNoteId = useSelectedNoteIdStore((s) => s.selectedNoteId);
-  const setSelectedNoteId = useSelectedNoteIdStore((s) => s.setSelectedNoteId);
+  const selectedNoteId = useCanvasStore((s) => s.selectedNoteId);
+  const setSelectedNoteId = useCanvasStore((s) => s.setSelectedNoteId);
 
   const [isEditingState, setIsEditingState] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const isSelected = selectedNoteId === note.id;
   const isEditing = isSelected && isEditingState;
@@ -87,7 +88,16 @@ export const NoteItem = ({
         class: editorClassNames,
       },
     },
-    extensions: [StarterKit.configure({ heading: { levels: [1, 2, 3] } })],
+    extensions: [
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      Image.configure({
+        HTMLAttributes: {
+          class: "rounded-xs",
+        },
+        allowBase64: true,
+      }),
+      Link,
+    ],
     immediatelyRender: true,
     onUpdate: ({ editor: currentEditor }) => {
       const html = currentEditor.getHTML();
@@ -231,16 +241,35 @@ export const NoteItem = ({
     [notes, note.id, updateNote]
   );
 
+  const getOutlineWidth = () => {
+    if (isSelected) {
+      return 2;
+    } else if (isHovered) {
+      return 1;
+    }
+    return 0;
+  };
+
   return (
     <div
       ref={setReference}
-      style={{ left: note.x, top: note.y }}
+      style={{
+        left: note.x,
+        outline: getOutlineWidth()
+          ? `${getOutlineWidth() / camera.scale}px solid var(--color-blue-500)`
+          : "none",
+        outlineOffset: getOutlineWidth()
+          ? -getOutlineWidth() / camera.scale
+          : 0,
+        top: note.y,
+      }}
       className={cn(
         "pointer-events-auto absolute h-fit w-sm rounded-sm p-4 shadow-md",
         COLORS[note.color],
-        !isEditing && "touch-none select-none",
-        isSelected && "ring-2 ring-blue-500"
+        !isEditing && "touch-none select-none"
       )}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       {...bind()}
       {...getReferenceProps()}
     >
@@ -248,7 +277,7 @@ export const NoteItem = ({
       <div
         className={cn(
           isSelected ? "flex" : "hidden",
-          "border-panel-border bg-panel text-foreground absolute bottom-full left-1/2 z-999 origin-bottom -translate-x-1/2 rounded-md border shadow-lg backdrop-blur-sm"
+          "border-panel-border bg-panel text-foreground absolute bottom-full left-1/2 z-999 origin-bottom -translate-x-1/2 rounded-md border shadow-md backdrop-blur-sm"
         )}
         style={{
           transform: `scale(${1 / camera.scale}) translateY(${camera.scale * -12}px)`,
@@ -269,10 +298,7 @@ export const NoteItem = ({
                 )}
                 disabled={note.color === k}
               >
-                {note.color === k && (
-                  // <div className="bg-foreground size-2 rounded-full shadow-xs" />
-                  <CheckIcon className="size-4.5" />
-                )}
+                {note.color === k && <CheckIcon className="size-4.5" />}
               </button>
             ))}
         </div>
@@ -319,7 +345,10 @@ export const NoteItem = ({
       </div>
 
       <div
-        className={isEditing ? "pointer-events-auto" : "pointer-events-none"}
+        className={cn(
+          isEditing ? "pointer-events-auto" : "pointer-events-none",
+          isSelected && "[&_.ProseMirror-selectednode]:animate-pulse"
+        )}
       >
         <EditorContent editor={editor} />
       </div>

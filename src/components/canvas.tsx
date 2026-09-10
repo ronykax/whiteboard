@@ -3,23 +3,42 @@
 import { useGesture } from "@use-gesture/react";
 import { useEffect, useRef, useState } from "react";
 
+import { useCanvasStore } from "@/canvas-store";
 import type { notesTable } from "@/db/schema";
-import { useCanvasStore } from "@/stores/canvas";
 import type { Camera } from "@/types";
 
 import { Bottom } from "./bottom";
 import { NoteItem } from "./note";
+
+const INITIAL_CAMERA: Camera = { scale: 1, x: 0, y: 0 };
 
 export const Canvas = ({
   initialNotes,
 }: {
   initialNotes: (typeof notesTable.$inferSelect)[];
 }) => {
-  const [camera, setCamera] = useState<Camera>({ scale: 1, x: 0, y: 0 });
+  const [camera, setCamera] = useState(INITIAL_CAMERA);
   const notes = useCanvasStore((state) => state.notes);
   const setNotes = useCanvasStore((state) => state.setNotes);
 
   const canvasRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(
+    () =>
+      // oxlint-disable-next-line react/set-state-in-effect
+      setCamera(
+        JSON.parse(
+          localStorage.getItem("cam") ?? JSON.stringify(INITIAL_CAMERA)
+        )
+      ),
+    [setCamera]
+  );
+
+  useEffect(() => {
+    if (camera !== INITIAL_CAMERA) {
+      localStorage.setItem("cam", JSON.stringify(camera));
+    }
+  }, [camera]);
 
   useEffect(() => setNotes(initialNotes), [setNotes, initialNotes]);
 
@@ -51,7 +70,7 @@ export const Canvas = ({
     {
       pinch: {
         from: () => [camera.scale, 0],
-        scaleBounds: { max: 3, min: 0.1 },
+        scaleBounds: { max: 6, min: 0.1 },
       },
       target: canvasRef,
     }

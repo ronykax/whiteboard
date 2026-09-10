@@ -20,8 +20,7 @@ const serif = Domine({
 });
 
 export const metadata: Metadata = {
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  description: "An infinite canvas for all your thoughts, feelings, and ideas.",
   title: "Whiteboard",
 };
 
