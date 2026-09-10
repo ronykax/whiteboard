@@ -1,4 +1,4 @@
-import { DismissableLayer } from "@radix-ui/react-dismissable-layer";
+import { useDismiss, useFloating, useInteractions } from "@floating-ui/react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useGesture } from "@use-gesture/react";
@@ -62,6 +62,22 @@ export const NoteItem = ({
 
   const isSelected = selectedNoteId === note.id;
   const isEditing = isSelected && isEditingState;
+
+  const {
+    context,
+    refs: { setReference },
+  } = useFloating({
+    onOpenChange: (open) => {
+      if (!open) {
+        setSelectedNoteId(null);
+        setIsEditingState(false);
+      }
+    },
+    open: isSelected,
+  });
+
+  const dismiss = useDismiss(context);
+  const { getReferenceProps } = useInteractions([dismiss]);
 
   const editor = useEditor({
     content: note.html,
@@ -215,8 +231,9 @@ export const NoteItem = ({
     [notes, note.id, updateNote]
   );
 
-  const noteContent = (
+  return (
     <div
+      ref={setReference}
       style={{ left: note.x, top: note.y }}
       className={cn(
         "pointer-events-auto absolute h-fit w-sm rounded-sm p-4 shadow-md",
@@ -225,6 +242,7 @@ export const NoteItem = ({
         isSelected && "ring-2 ring-blue-500"
       )}
       {...bind()}
+      {...getReferenceProps()}
     >
       {/* top bar */}
       <div
@@ -307,20 +325,4 @@ export const NoteItem = ({
       </div>
     </div>
   );
-
-  if (isSelected) {
-    return (
-      <DismissableLayer
-        asChild
-        onDismiss={() => {
-          setSelectedNoteId(null);
-          setIsEditingState(false);
-        }}
-      >
-        {noteContent}
-      </DismissableLayer>
-    );
-  }
-
-  return noteContent;
 };

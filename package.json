@@ -15,8 +15,8 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.20",
     "@libsql/client": "^0.18.0",
-    "@radix-ui/react-dismissable-layer": "^1.1.19",
     "@tiptap/pm": "^3.31.3",
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
